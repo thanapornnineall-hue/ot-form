@@ -7,289 +7,84 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
-    --blue: #1F3864;
-    --blue-mid: #2E75B6;
-    --blue-light: #E6F1FB;
-    --green: #2E7D32;
-    --green-light: #E8F5E9;
-    --green-bg: #C8E6C9;
-    --orange: #E65100;
-    --orange-light: #FFF3E0;
-    --red: #B71C1C;
-    --red-light: #FFCDD2;
-    --yellow-light: #FFF9C4;
-    --gray: #555;
-    --gray-light: #F5F5F5;
-    --border: #BDBDBD;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --blue: #1F3864; --blue-mid: #2E75B6; --blue-light: #E6F1FB;
+    --green: #2E7D32; --green-light: #E8F5E9; --green-bg: #C8E6C9;
+    --orange: #E65100; --red: #B71C1C; --red-light: #FFCDD2;
+    --border: #BDBDBD; --radius: 10px; --radius-sm: 6px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #F0F4F8;
-    color: #222;
-    min-height: 100vh;
-    padding-bottom: 40px;
-  }
-  /* ── HEADER ── */
-  .app-header {
-    background: var(--blue);
-    color: #fff;
-    padding: 18px 20px 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F0F4F8; color: #222; min-height: 100vh; padding-bottom: 40px; }
+  .app-header { background: var(--blue); color: #fff; padding: 18px 20px 16px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
   .app-header svg { width: 26px; height: 26px; flex-shrink: 0; }
-  .app-header h1 { font-size: 17px; font-weight: 600; letter-spacing: 0.01em; }
+  .app-header h1 { font-size: 17px; font-weight: 600; }
   .app-header p  { font-size: 12px; opacity: 0.75; margin-top: 2px; }
-
-  /* ── LAYOUT ── */
   .container { max-width: 560px; margin: 0 auto; padding: 20px 16px 0; }
-
-  /* ── CARD ── */
-  .card {
-    background: #fff;
-    border-radius: var(--radius);
-    border: 1px solid #E0E7EF;
-    padding: 18px;
-    margin-bottom: 14px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  }
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--blue-mid);
-    margin-bottom: 14px;
-  }
-
-  /* ── FORM FIELDS ── */
+  .card { background: #fff; border-radius: var(--radius); border: 1px solid #E0E7EF; padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--blue-mid); margin-bottom: 14px; }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .field-grid.three { grid-template-columns: 1fr 1fr 1fr; }
-  @media (max-width: 400px) {
-    .field-grid, .field-grid.three { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 400px) { .field-grid, .field-grid.three { grid-template-columns: 1fr; } }
   .field { display: flex; flex-direction: column; gap: 5px; }
-  .field.full { grid-column: 1 / -1; }
-  label { font-size: 12px; font-weight: 600; color: var(--gray); }
-  input, select {
-    width: 100%;
-    height: 40px;
-    padding: 0 12px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    color: #222;
-    background: #fff;
-    outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  input:focus, select:focus {
-    border-color: var(--blue-mid);
-    box-shadow: 0 0 0 3px rgba(46,117,182,0.12);
-  }
+  label { font-size: 12px; font-weight: 600; color: #555; }
+  input, select { width: 100%; height: 40px; padding: 0 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: #222; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; -webkit-appearance: none; appearance: none; }
+  input:focus, select:focus { border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(46,117,182,0.12); }
   .select-wrap { position: relative; }
-  .select-wrap::after {
-    content: '';
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 6px solid var(--gray);
-    pointer-events: none;
-  }
-
-  /* ── OT SUMMARY BOX ── */
-  .ot-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--blue-light);
-    border: 1px solid #B5D4F4;
-    border-radius: var(--radius-sm);
-    padding: 12px 16px;
-    margin-top: 14px;
-  }
+  .select-wrap::after { content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #555; pointer-events: none; }
+  .ot-box { display: flex; align-items: center; justify-content: space-between; background: var(--blue-light); border: 1px solid #B5D4F4; border-radius: var(--radius-sm); padding: 12px 16px; margin-top: 14px; }
   .ot-box-label { font-size: 12px; color: var(--blue); font-weight: 600; }
   .ot-box-sub   { font-size: 11px; color: #555; margin-top: 3px; }
   .ot-hours     { font-size: 26px; font-weight: 700; color: var(--blue); }
   .ot-unit      { font-size: 13px; color: var(--blue); margin-left: 4px; }
-
-  /* ── DIVIDER ── */
   .divider { height: 1px; background: #F0F0F0; margin: 16px 0; }
-
-  /* ── BUTTONS ── */
   .btn-row { display: flex; gap: 10px; margin-top: 14px; }
-  .btn {
-    flex: 1;
-    height: 44px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    transition: opacity 0.15s, transform 0.1s;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .btn { flex: 1; height: 44px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 7px; transition: opacity 0.15s, transform 0.1s; -webkit-tap-highlight-color: transparent; }
   .btn:active { transform: scale(0.97); }
   .btn-primary { background: var(--blue); color: #fff; }
   .btn-primary:hover { opacity: 0.9; }
-  .btn-export {
-    background: var(--green);
-    color: #fff;
-  }
+  .btn-primary:disabled { background: #9E9E9E; cursor: not-allowed; }
+  .btn-export { background: var(--green); color: #fff; }
   .btn-export:disabled { background: #9E9E9E; cursor: not-allowed; }
   .btn-export:not(:disabled):hover { opacity: 0.9; }
-  .btn-ghost {
-    background: #F5F5F5;
-    color: var(--gray);
-    border: 1px solid var(--border);
-    flex: 0 0 auto;
-    padding: 0 16px;
-  }
+  .btn-ghost { background: #F5F5F5; color: #555; border: 1px solid var(--border); flex: 0 0 auto; padding: 0 16px; }
   .btn-ghost:hover { background: #EBEBEB; }
   .btn svg { width: 17px; height: 17px; flex-shrink: 0; }
-
-  /* ── ENTRIES TABLE ── */
-  .entries-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .badge {
-    background: var(--blue-light);
-    color: var(--blue);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
+  .entries-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .badge { background: var(--blue-light); color: var(--blue); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    min-width: 380px;
-  }
-  thead th {
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 0 8px 8px;
-    border-bottom: 1.5px solid #E8E8E8;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 380px; }
+  thead th { text-align: left; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 8px 8px; border-bottom: 1.5px solid #E8E8E8; }
   tbody tr { border-bottom: 1px solid #F5F5F5; }
   tbody tr:last-child { border-bottom: none; }
   tbody td { padding: 10px 8px; vertical-align: middle; }
   .emp-name { font-weight: 600; color: var(--blue); }
   .emp-id   { font-size: 11px; color: #888; }
-  .ot-pill  {
-    display: inline-block;
-    background: var(--green-bg);
-    color: var(--green);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 9px;
-    border-radius: 20px;
-  }
-  .shift-pill {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 20px;
-  }
+  .ot-pill  { display: inline-block; background: var(--green-bg); color: var(--green); font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+  .shift-pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 20px; }
   .shift-a { background: #E3F2FD; color: #0D47A1; }
   .shift-b { background: #F3E5F5; color: #4A148C; }
-  .del-btn {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    width: 26px;
-    height: 26px;
-    cursor: pointer;
-    color: #999;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s, color 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .del-btn { background: none; border: 1px solid var(--border); border-radius: 4px; width: 26px; height: 26px; cursor: pointer; color: #999; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s; }
   .del-btn:hover { background: var(--red-light); color: var(--red); border-color: #EF9A9A; }
-  .total-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    padding: 12px 8px 0;
-    border-top: 1.5px solid #E8E8E8;
-    margin-top: 8px;
-  }
+  .total-row { display: flex; justify-content: space-between; font-size: 13px; padding: 12px 8px 0; border-top: 1.5px solid #E8E8E8; margin-top: 8px; }
   .total-row span:first-child { color: #888; }
-  .total-row span:last-child  { font-weight: 700; color: var(--green); }
-  .empty-state {
-    text-align: center;
-    padding: 28px 0;
-    color: #AAAAAA;
-    font-size: 13px;
-    line-height: 1.7;
-  }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: #222;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 11px 22px;
-    border-radius: 24px;
-    white-space: nowrap;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 999;
-    pointer-events: none;
-  }
+  .total-row span:last-child { font-weight: 700; color: var(--green); }
+  .empty-state { text-align: center; padding: 28px 0; color: #AAAAAA; font-size: 13px; line-height: 1.7; }
+  .status-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+  .status-bar.sending { background: #E3F2FD; color: #0D47A1; }
+  .status-bar.success { background: var(--green-light); color: var(--green); }
+  .status-bar.error   { background: var(--red-light); color: var(--red); }
+  .status-bar svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .spinner { width: 15px; height: 15px; border: 2px solid #90CAF9; border-top-color: #0D47A1; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: #fff; font-size: 13px; font-weight: 500; padding: 11px 22px; border-radius: 24px; white-space: nowrap; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 999; pointer-events: none; }
   .toast.show { transform: translateX(-50%) translateY(0); }
-
-  /* ── FOOTER ── */
-  .footer {
-    text-align: center;
-    padding: 28px 0 8px;
-    font-size: 11px;
-    color: #BBBBBB;
-  }
+  .footer { text-align: center; padding: 28px 0 8px; font-size: 11px; color: #BBBBBB; }
 </style>
 </head>
 <body>
 
 <div class="app-header">
   <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
   </svg>
   <div>
     <h1>OT Request</h1>
@@ -298,13 +93,11 @@
 </div>
 
 <div class="container">
-
-  <!-- Form Card -->
   <div class="card">
     <div class="section-label">ข้อมูลพนักงาน</div>
     <div class="field-grid">
       <div class="field">
-        <label for="empId">Employee ID</label>
+        <label>Employee ID</label>
         <div class="select-wrap">
           <select id="empId">
             <option value="">— เลือกพนักงาน —</option>
@@ -331,24 +124,23 @@
         </div>
       </div>
       <div class="field">
-        <label for="otDate">วันที่ทำ OT</label>
+        <label>วันที่ทำ OT</label>
         <input type="date" id="otDate">
       </div>
     </div>
-
     <div class="divider"></div>
     <div class="section-label">ช่วงเวลา OT</div>
     <div class="field-grid three">
       <div class="field">
-        <label for="otStart">เวลาเริ่ม OT</label>
+        <label>เวลาเริ่ม OT</label>
         <input type="time" id="otStart">
       </div>
       <div class="field">
-        <label for="otEnd">เวลาสิ้นสุด OT</label>
+        <label>เวลาสิ้นสุด OT</label>
         <input type="time" id="otEnd">
       </div>
       <div class="field">
-        <label for="shift">Shift</label>
+        <label>Shift</label>
         <div class="select-wrap">
           <select id="shift">
             <option value="B">Shift B (18:00)</option>
@@ -357,7 +149,6 @@
         </div>
       </div>
     </div>
-
     <div class="ot-box">
       <div>
         <div class="ot-box-label">ชั่วโมง OT รวม</div>
@@ -368,9 +159,8 @@
         <span class="ot-unit">ชั่วโมง</span>
       </div>
     </div>
-
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="submitOT()">
+      <button class="btn btn-primary" id="submitBtn" onclick="submitOT()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
@@ -379,24 +169,21 @@
     </div>
   </div>
 
-  <!-- Entries Card -->
   <div class="card">
     <div class="entries-header">
       <div class="section-label" style="margin:0">รายการ OT</div>
       <span class="badge" id="countBadge">0 รายการ</span>
     </div>
-
+    <div id="statusBar" style="display:none"></div>
     <div id="entryArea">
       <div class="empty-state">ยังไม่มีรายการ<br>กรอกข้อมูลด้านบนแล้วกด "บันทึก OT"</div>
     </div>
-
     <div class="btn-row" style="margin-top:16px">
       <button class="btn btn-export" id="exportBtn" disabled onclick="exportExcel()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
-          <line x1="12" y1="18" x2="12" y2="12"/>
-          <line x1="9" y1="15" x2="15" y2="15"/>
+          <line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
         </svg>
         Export Excel
       </button>
@@ -408,13 +195,14 @@
       </button>
     </div>
   </div>
-
-  <div class="footer">Nineall Group · OT Request Form · v1.0</div>
+  <div class="footer">Nineall Group · OT Request Form · v2.0</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz5o5NXGpHOsc_ZlkXhfOg82_5gelEliroHWDOxxlC1YLzbDBkB7LlFJZdny4hK5bnfXQ/exec';
+
 const empNames = {
   90001:'Nana',90008:'Piano',90012:'Team',90014:'Namfon',90016:'Nun',
   90019:'Nuch',90020:'Nut',90026:'Ice',90027:'Khomkham',90028:'Jean',
@@ -423,14 +211,10 @@ const empNames = {
 };
 let entries = [];
 
-// Set today's date
 const today = new Date();
 document.getElementById('otDate').value = today.toISOString().split('T')[0];
-
-// Shift change → reset start time
-document.getElementById('shift').addEventListener('change', () => {
-  document.getElementById('otStart').value =
-    document.getElementById('shift').value === 'A' ? '17:30' : '18:00';
+document.getElementById('shift').addEventListener('change', function() {
+  document.getElementById('otStart').value = this.value === 'A' ? '17:30' : '18:00';
   calcOT();
 });
 document.getElementById('otStart').value = '18:00';
@@ -438,135 +222,119 @@ document.getElementById('otStart').addEventListener('input', calcOT);
 document.getElementById('otEnd').addEventListener('input', calcOT);
 
 function calcOT() {
-  const s = document.getElementById('otStart').value;
-  const e = document.getElementById('otEnd').value;
-  if (!s || !e) {
-    document.getElementById('otHours').textContent = '—';
-    document.getElementById('otRange').textContent = 'กรอกเวลาเริ่ม–สิ้นสุด';
-    return 0;
-  }
-  const [sh, sm] = s.split(':').map(Number);
-  const [eh, em] = e.split(':').map(Number);
-  const mins = (eh * 60 + em) - (sh * 60 + sm);
-  if (mins <= 0) {
-    document.getElementById('otHours').textContent = '0';
-    document.getElementById('otRange').textContent = '⚠ เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม';
-    return 0;
-  }
-  const h = Math.floor(mins / 60), rm = mins % 60;
-  document.getElementById('otHours').textContent = rm ? h + 'h ' + rm + 'm' : h;
-  document.getElementById('otRange').textContent = s + ' → ' + e;
+  var s = document.getElementById('otStart').value;
+  var e = document.getElementById('otEnd').value;
+  if (!s || !e) { document.getElementById('otHours').textContent='—'; document.getElementById('otRange').textContent='กรอกเวลาเริ่ม–สิ้นสุด'; return 0; }
+  var sm = s.split(':').map(Number); var em = e.split(':').map(Number);
+  var mins = (em[0]*60+em[1]) - (sm[0]*60+sm[1]);
+  if (mins <= 0) { document.getElementById('otHours').textContent='0'; document.getElementById('otRange').textContent='⚠ เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม'; return 0; }
+  var h = Math.floor(mins/60), rm = mins%60;
+  document.getElementById('otHours').textContent = rm ? h+'h '+rm+'m' : h;
+  document.getElementById('otRange').textContent = s+' → '+e;
   return mins;
 }
 
+function fmtMin(m) { var h=Math.floor(m/60),rm=m%60; return rm?h+'h '+rm+'m':h+'h'; }
+function fmtDate(d) { var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function toDecimal(m) { return Math.round(m/60*100)/100; }
+
+function showStatus(type, msg) {
+  var bar = document.getElementById('statusBar');
+  var icons = {
+    sending: '<div class="spinner"></div>',
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    error:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+  };
+  bar.style.display = 'flex';
+  bar.className = 'status-bar ' + type;
+  bar.innerHTML = icons[type] + '<span>' + msg + '</span>';
+}
+function hideStatus() { document.getElementById('statusBar').style.display='none'; }
+
 function submitOT() {
-  const eid  = document.getElementById('empId').value;
-  const date = document.getElementById('otDate').value;
-  const s    = document.getElementById('otStart').value;
-  const e    = document.getElementById('otEnd').value;
-  const sh   = document.getElementById('shift').value;
-  if (!eid || !date || !s || !e) { showToast('กรุณากรอกข้อมูลให้ครบ'); return; }
-  const mins = calcOT();
+  var eid  = document.getElementById('empId').value;
+  var date = document.getElementById('otDate').value;
+  var s    = document.getElementById('otStart').value;
+  var e    = document.getElementById('otEnd').value;
+  var sh   = document.getElementById('shift').value;
+  if (!eid||!date||!s||!e) { showToast('กรุณากรอกข้อมูลให้ครบ'); return; }
+  var mins = calcOT();
   if (mins <= 0) { showToast('เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม'); return; }
-  entries.push({ eid: parseInt(eid), name: empNames[eid] || eid,
-                 date, start: s, end: e, shift: 'Shift ' + sh, mins });
-  render();
-  document.getElementById('otStart').value = sh === 'A' ? '17:30' : '18:00';
-  document.getElementById('otEnd').value = '';
-  document.getElementById('otHours').textContent = '—';
-  document.getElementById('otRange').textContent = 'กรอกเวลาเริ่ม–สิ้นสุด';
-  showToast('บันทึก OT เรียบร้อย ✓');
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  showStatus('sending', 'กำลังส่งข้อมูลเข้า Google Sheet...');
+
+  var payload = {
+    eid: parseInt(eid), name: empNames[eid]||eid,
+    date: fmtDate(date), shift: 'Shift '+sh,
+    start: s, end: e,
+    hours: toDecimal(mins), mins: mins
+  };
+
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  }).then(function() {
+    entries.push(Object.assign({}, payload, {mins: mins}));
+    render();
+    showStatus('success', 'บันทึกลง Google Sheet เรียบร้อยแล้ว ✓');
+    setTimeout(hideStatus, 4000);
+    document.getElementById('otStart').value = sh==='A'?'17:30':'18:00';
+    document.getElementById('otEnd').value = '';
+    document.getElementById('otHours').textContent = '—';
+    document.getElementById('otRange').textContent = 'กรอกเวลาเริ่ม–สิ้นสุด';
+    btn.disabled = false;
+  }).catch(function(err) {
+    showStatus('error', 'ส่งไม่สำเร็จ กรุณาลองใหม่');
+    btn.disabled = false;
+  });
 }
 
-function deleteEntry(i) { entries.splice(i, 1); render(); }
-function clearAll()     { entries = []; render(); showToast('ล้างรายการทั้งหมดแล้ว'); }
-
-function fmtMin(m) {
-  const h = Math.floor(m / 60), rm = m % 60;
-  return rm ? h + 'h ' + rm + 'm' : h + 'h';
-}
-function fmtDate(d) {
-  const p = d.split('-'); return p[2] + '/' + p[1] + '/' + p[0];
-}
-function toDecimal(m) { return Math.round(m / 60 * 100) / 100; }
+function deleteEntry(i) { entries.splice(i,1); render(); }
+function clearAll() { entries=[]; render(); hideStatus(); showToast('ล้างรายการทั้งหมดแล้ว'); }
 
 function render() {
-  const area  = document.getElementById('entryArea');
-  const badge = document.getElementById('countBadge');
-  const expBtn = document.getElementById('exportBtn');
-  const clrBtn = document.getElementById('clearBtn');
-  badge.textContent = entries.length + ' รายการ';
-  expBtn.disabled   = entries.length === 0;
-  clrBtn.style.display = entries.length ? 'flex' : 'none';
-
-  if (!entries.length) {
-    area.innerHTML = '<div class="empty-state">ยังไม่มีรายการ<br>กรอกข้อมูลด้านบนแล้วกด "บันทึก OT"</div>';
-    return;
-  }
-  let html = '<div class="table-wrap"><table><thead><tr>' +
-    '<th>พนักงาน</th><th>วันที่</th><th>Shift</th><th>เริ่ม</th><th>สิ้นสุด</th><th>OT</th><th></th>' +
-    '</tr></thead><tbody>';
-  entries.forEach(function(e, i) {
-    const sc = e.shift === 'Shift A' ? 'shift-a' : 'shift-b';
-    html += '<tr>' +
-      '<td><div class="emp-name">' + e.name + '</div><div class="emp-id">' + e.eid + '</div></td>' +
-      '<td>' + fmtDate(e.date) + '</td>' +
-      '<td><span class="shift-pill ' + sc + '">' + e.shift + '</span></td>' +
-      '<td>' + e.start + '</td>' +
-      '<td>' + e.end + '</td>' +
-      '<td><span class="ot-pill">' + fmtMin(e.mins) + '</span></td>' +
-      '<td><button class="del-btn" onclick="deleteEntry(' + i + ')">×</button></td>' +
-      '</tr>';
+  var area=document.getElementById('entryArea');
+  var badge=document.getElementById('countBadge');
+  var expBtn=document.getElementById('exportBtn');
+  var clrBtn=document.getElementById('clearBtn');
+  badge.textContent = entries.length+' รายการ';
+  expBtn.disabled = entries.length===0;
+  clrBtn.style.display = entries.length?'flex':'none';
+  if (!entries.length) { area.innerHTML='<div class="empty-state">ยังไม่มีรายการ<br>กรอกข้อมูลด้านบนแล้วกด "บันทึก OT"</div>'; return; }
+  var html='<div class="table-wrap"><table><thead><tr><th>พนักงาน</th><th>วันที่</th><th>Shift</th><th>เริ่ม</th><th>สิ้นสุด</th><th>OT</th><th></th></tr></thead><tbody>';
+  entries.forEach(function(e,i) {
+    var sc=e.shift==='Shift A'?'shift-a':'shift-b';
+    html+='<tr><td><div class="emp-name">'+e.name+'</div><div class="emp-id">'+e.eid+'</div></td><td>'+e.date+'</td><td><span class="shift-pill '+sc+'">'+e.shift+'</span></td><td>'+e.start+'</td><td>'+e.end+'</td><td><span class="ot-pill">'+fmtMin(e.mins)+'</span></td><td><button class="del-btn" onclick="deleteEntry('+i+')">×</button></td></tr>';
   });
-  html += '</tbody></table></div>';
-  const total = entries.reduce(function(a, e) { return a + e.mins; }, 0);
-  html += '<div class="total-row"><span>รวม OT ทั้งหมด</span><span>' + fmtMin(total) + '</span></div>';
-  area.innerHTML = html;
+  html+='</tbody></table></div>';
+  var total=entries.reduce(function(a,e){return a+e.mins;},0);
+  html+='<div class="total-row"><span>รวม OT ทั้งหมด</span><span>'+fmtMin(total)+'</span></div>';
+  area.innerHTML=html;
 }
 
 function exportExcel() {
-  if (!entries.length || typeof XLSX === 'undefined') return;
-  const wb = XLSX.utils.book_new();
-
-  // Sheet 1: OT Log
-  const hdr = ['ID','ชื่อพนักงาน','วันที่','Shift','เวลาเริ่ม OT','เวลาสิ้นสุด OT','OT (ชั่วโมง)','OT (นาที)'];
-  const rows = entries.map(function(e) {
-    return [e.eid, e.name, fmtDate(e.date), e.shift, e.start, e.end, toDecimal(e.mins), e.mins];
-  });
-  const totalMins = entries.reduce(function(a,e){ return a+e.mins; },0);
-  rows.push(['','รวมทั้งหมด','','','','', toDecimal(totalMins), totalMins]);
-
-  const ws = XLSX.utils.aoa_to_sheet([hdr].concat(rows));
-  ws['!cols'] = [{wch:8},{wch:14},{wch:12},{wch:10},{wch:12},{wch:14},{wch:14},{wch:12}];
-  XLSX.utils.book_append_sheet(wb, ws, 'OT Log');
-
-  // Sheet 2: Summary
-  var byEmp = {};
-  entries.forEach(function(e) {
-    if (!byEmp[e.eid]) byEmp[e.eid] = {name:e.name,count:0,totalMins:0,dates:[]};
-    byEmp[e.eid].count++;
-    byEmp[e.eid].totalMins += e.mins;
-    byEmp[e.eid].dates.push(fmtDate(e.date));
-  });
-  const sh2 = ['ID','ชื่อพนักงาน','จำนวนครั้ง','OT รวม (ชั่วโมง)','OT รวม (นาที)','วันที่ทำ OT'];
-  const r2 = Object.keys(byEmp).map(function(eid) {
-    var d = byEmp[eid];
-    return [parseInt(eid), d.name, d.count, toDecimal(d.totalMins), d.totalMins, d.dates.join(', ')];
-  });
-  const ws2 = XLSX.utils.aoa_to_sheet([sh2].concat(r2));
-  ws2['!cols'] = [{wch:8},{wch:14},{wch:12},{wch:16},{wch:14},{wch:40}];
-  XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
-
-  const dateStr = new Date().toISOString().split('T')[0].replace(/-/g,'');
-  XLSX.writeFile(wb, 'OT_Report_' + dateStr + '.xlsx');
-  showToast('Export สำเร็จ! ดาวน์โหลดไฟล์แล้ว ✓');
+  if (!entries.length||typeof XLSX==='undefined') return;
+  var wb=XLSX.utils.book_new();
+  var hdr=['ID','ชื่อพนักงาน','วันที่','Shift','เวลาเริ่ม OT','เวลาสิ้นสุด OT','OT (ชั่วโมง)','OT (นาที)'];
+  var rows=entries.map(function(e){return[e.eid,e.name,e.date,e.shift,e.start,e.end,e.hours,e.mins];});
+  var total=entries.reduce(function(a,e){return a+e.mins;},0);
+  rows.push(['','รวมทั้งหมด','','','','',toDecimal(total),total]);
+  var ws=XLSX.utils.aoa_to_sheet([hdr].concat(rows));
+  ws['!cols']=[{wch:8},{wch:14},{wch:12},{wch:10},{wch:12},{wch:14},{wch:14},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws,'OT Log');
+  var dateStr=new Date().toISOString().split('T')[0].replace(/-/g,'');
+  XLSX.writeFile(wb,'OT_Report_'+dateStr+'.xlsx');
+  showToast('Export สำเร็จ ✓');
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
 }
 </script>
 </body>
